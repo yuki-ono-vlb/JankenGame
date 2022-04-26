@@ -48,44 +48,44 @@ class Application(Frame):
 
 		# Enemy Nameの文言を表示させる
 		enemy_label: Label = Label(enemy_frame, text="Enemy Name")
-		self.enemy_name: Entry = Entry(enemy_frame, state="normal", width="50")
+		self.enemy_name: Entry = Entry(enemy_frame, state=Const.NORMAL, width="50")
 		self.enemy_hp: Message = Message(
 			enemy_hp_frame, text=f"{Const.HP_MAX}/{Const.HP_MAX}", width="40")
 		self.enemy_bar: Progressbar = Progressbar(
-			enemy_hp_frame, length=400, maximum=Const.HP_MAX, value=Const.HP_MAX, cursor="spider", mode="determinate", orient=HORIZONTAL)
+			enemy_hp_frame, length=Const.BAR_LENGTH, maximum=Const.HP_MAX, value=Const.HP_MAX, cursor="spider", mode="determinate", orient=HORIZONTAL)
 		# Prayer Nameの文言を表示させる
 		prayer_label: Label = Label(prayer_frame, text="Prayer Name")
-		self.prayer_name: Entry = Entry(prayer_frame, state="normal", width="50")
+		self.prayer_name: Entry = Entry(prayer_frame, state=Const.NORMAL, width="50")
 		self.prayer_hp: Message = Message(
 			prayer_hp_frame, text=f"{Const.HP_MAX}/{Const.HP_MAX}", width="40")
 		self.prayer_bar: Progressbar = Progressbar(
-			prayer_hp_frame, length=400, maximum=Const.HP_MAX, value=Const.HP_MAX, cursor="spider", mode="determinate", orient=HORIZONTAL)
+			prayer_hp_frame, length=Const.BAR_LENGTH, maximum=Const.HP_MAX, value=Const.HP_MAX, cursor="spider", mode="determinate", orient=HORIZONTAL)
 
 		# メニューの設定
 		self.start: Button = Button(
-			menu_frame, text="Start", width="15", state="normal")
+			menu_frame, text="Start", width=Const.BTN_WIDTH, state=Const.NORMAL)
 		self.start.bind("<ButtonPress>", self.__on_start)
 		self.restart: Button = Button(
-			menu_frame, text="ReStart", width="15", state="disable")
+			menu_frame, text="ReStart", width=Const.BTN_WIDTH, state=Const.DISABLE)
 		self.restart.bind("<ButtonPress>", self.__on_restart)
 		self.end: Button = Button(menu_frame, text="End",
-		                          width="15", state="disable")
+		                          width=Const.BTN_WIDTH, state=Const.DISABLE)
 		self.end.bind("<ButtonPress>", self.__on_end)
 
 		# じゃんけんの設定
 
 		self.rock: Button = Button(janken_frame, text="グー", image=self.rock_img,
-                             compound="top", state="disable")
+                             compound="top", state=Const.DISABLE)
 		self.rock.bind("<ButtonPress>", self.__on_click)
 		self.scissors: Button = Button(janken_frame, text="チョキ",
-                                 image=self.scissors_img, compound="top", state="disable")
+                                 image=self.scissors_img, compound="top", state=Const.DISABLE)
 		self.scissors.bind("<ButtonPress>", self.__on_click)
 		self.paper: Button = Button(janken_frame, text="パー",
-                              image=self.paper_img, compound="top", state="disable")
+                              image=self.paper_img, compound="top", state=Const.DISABLE)
 		self.paper.bind("<ButtonPress>", self.__on_click)
 
 		# ログテキストの設定
-		self.log_message: Text = Text(self, state="normal")
+		self.log_message: Text = Text(self, state=Const.NORMAL)
 
 		# エネミーに関するウィジットの配置場所を設定
 		enemy_frame.pack()
@@ -124,24 +124,24 @@ class Application(Frame):
 		'''
 		try:
 			if is_none_empty(self.prayer_unit.get_name()) and is_none_empty(self.enemy_unit.get_name()):
-				showerror("ユニットネーム 未入力", "プレイヤーとエネミーの名前を入力してください。")
+				showerror(Const.ERR_TITLE, f"プレイヤーとエネミー{Const.ERR_MESSAGE}")
 				return
 			elif is_none_empty(self.prayer_unit.get_name()) or is_none_empty(self.enemy_unit.get_name()):
 				target: str = "プレイヤー"
 				if is_none_empty(self.enemy_unit.get_name()):
 					target = "エネミー"
-				showerror("ユニットネーム 未入力", f"{target}の名前を入力してください。")
+				showerror(Const.ERR_TITLE, f"{target}{Const.ERR_MESSAGE}")
 				return
 
 			self.print(f"ゲーム開始!!{Const.NEW_LINE}")
-			self.rock["state"] = "normal"
-			self.scissors["state"] = "normal"
-			self.paper["state"] = "normal"
-			self.enemy_name["state"] = "disable"
-			self.prayer_name["state"] = "disable"
-			self.start["state"] = "disable"
-			self.restart["state"] = "normal"
-			self.end["state"] = "normal"
+			self.rock[Const.STATE] = Const.NORMAL
+			self.scissors[Const.STATE] = Const.NORMAL
+			self.paper[Const.STATE] = Const.NORMAL
+			self.enemy_name[Const.STATE] = Const.DISABLE
+			self.prayer_name[Const.STATE] = Const.DISABLE
+			self.start[Const.STATE] = Const.DISABLE
+			self.restart[Const.STATE] = Const.NORMAL
+			self.end[Const.STATE] = Const.NORMAL
 		except Exception as e:
 			print(f"type:{type(e)}")
 			print(f"message:{e}")
@@ -151,7 +151,7 @@ class Application(Frame):
 		ゲームの進行
 		'''
 		try:
-			if self.start["state"] == "normal":
+			if self.start[Const.STATE] == Const.NORMAL:
 				return
 			self.prayer_unit.next_hand(Const.JANKEN[event.widget["text"]])
 			self.enemy_unit.next_hand()
@@ -176,20 +176,20 @@ class Application(Frame):
 		'''
 		ゲーム終了
 		'''
-		if self.end["state"] == "disable":
+		if self.end[Const.STATE] == Const.DISABLE:
 			return
 
 		self.print(f"お疲れさまでした。ゲーム終了です。{Const.NEW_LINE}")
 		self.prayer_unit.end_game()
 		self.enemy_unit.end_game()
-		self.rock["state"] = "disable"
-		self.scissors["state"] = "disable"
-		self.paper["state"] = "disable"
-		self.enemy_name["state"] = "normal"
-		self.prayer_name["state"] = "normal"
-		self.start["state"] = "normal"
-		self.restart["state"] = "disable"
-		self.end["state"] = "disable"
+		self.rock[Const.STATE] = Const.DISABLE
+		self.scissors[Const.STATE] = Const.DISABLE
+		self.paper[Const.STATE] = Const.DISABLE
+		self.enemy_name[Const.STATE] = Const.NORMAL
+		self.prayer_name[Const.STATE] = Const.NORMAL
+		self.start[Const.STATE] = Const.NORMAL
+		self.restart[Const.STATE] = Const.DISABLE
+		self.end[Const.STATE] = Const.DISABLE
 
 	def __judge(self):
 		'''
@@ -200,20 +200,23 @@ class Application(Frame):
 			self.print(f"あいこだ！！{Const.NEW_LINE}")
 			return
 
+		win_unit: str = self.prayer_unit.get_name()
 		if ((self.prayer_unit.get_hand() == Const.JANKEN["グー"]) and (self.enemy_unit.get_hand() == Const.JANKEN["チョキ"]) or (self.prayer_unit.get_hand() == Const.JANKEN["チョキ"]) and (self.enemy_unit.get_hand() == Const.JANKEN["パー"]) or (self.prayer_unit.get_hand() == Const.JANKEN["パー"]) and (self.enemy_unit.get_hand() == Const.JANKEN["グー"])):
-			self.print(f"{self.prayer_unit.get_name()}の勝ち!")
 			self.enemy_unit.damage()
 			self.enemy_unit.display_status()
 		elif ((self.prayer_unit.get_hand() == Const.JANKEN["グー"]) and (self.enemy_unit.get_hand() == Const.JANKEN["パー"]) or (self.prayer_unit.get_hand() == Const.JANKEN["チョキ"]) and (self.enemy_unit.get_hand() == Const.JANKEN["グー"]) or (self.prayer_unit.get_hand() == Const.JANKEN["パー"]) and (self.enemy_unit.get_hand() == Const.JANKEN["チョキ"])):
-			self.print(f"{self.enemy_unit.get_name()}の勝ち!")
+			win_unit = self.enemy_unit.get_name()
 			self.prayer_unit.damage()
 			self.prayer_unit.display_status()
+   
+		self.print(f"{win_unit}{Const.WIN}{Const.NEW_LINE}")
 
 		if self.prayer_unit.is_dead() or self.enemy_unit.is_dead():
+			result:str = "Win!!"
 			if self.prayer_unit.is_dead():
-				showinfo(title="結果", message="You lose!!")
-			else:
-				showinfo(title="結果", message="You Win!!")
+				result = "lose!!"
+
+			showinfo(title="結果", message=f"You {result}")
 
 			self.__end()
 
