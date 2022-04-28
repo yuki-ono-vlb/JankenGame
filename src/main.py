@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # インポート
 import sys
-from tkinter import HORIZONTAL, LEFT, END, Button, Entry, Frame, Label, PhotoImage, Text, Tk, Message
+from tkinter import HORIZONTAL, LEFT, END, Button, Entry, Frame, Label, PhotoImage, Text, Tk
 from tkinter.messagebox import showinfo, showerror
 from functools import partial
 from tkinter.ttk import Progressbar
@@ -49,15 +49,15 @@ class Application(Frame):
 		# Enemy Nameの文言を表示させる
 		enemy_label: Label = Label(enemy_frame, text="Enemy Name")
 		self.enemy_name: Entry = Entry(enemy_frame, state=Const.NORMAL, width="50")
-		self.enemy_hp: Message = Message(
-			enemy_hp_frame, text=f"{Const.HP_MAX}/{Const.HP_MAX}", width="40")
+		self.enemy_hp: Label = Label(
+			enemy_hp_frame, text=f"{Const.HP_MAX}/{Const.HP_MAX}", width="10")
 		self.enemy_bar: Progressbar = Progressbar(
 			enemy_hp_frame, length=Const.BAR_LENGTH, maximum=Const.HP_MAX, value=Const.HP_MAX, cursor="spider", mode="determinate", orient=HORIZONTAL)
 		# Prayer Nameの文言を表示させる
 		prayer_label: Label = Label(prayer_frame, text="Prayer Name")
 		self.prayer_name: Entry = Entry(prayer_frame, state=Const.NORMAL, width="50")
-		self.prayer_hp: Message = Message(
-			prayer_hp_frame, text=f"{Const.HP_MAX}/{Const.HP_MAX}", width="40")
+		self.prayer_hp: Label = Label(
+			prayer_hp_frame, text=f"{Const.HP_MAX}/{Const.HP_MAX}", width="10")
 		self.prayer_bar: Progressbar = Progressbar(
 			prayer_hp_frame, length=Const.BAR_LENGTH, maximum=Const.HP_MAX, value=Const.HP_MAX, cursor="spider", mode="determinate", orient=HORIZONTAL)
 
@@ -156,6 +156,7 @@ class Application(Frame):
 			self.prayer_unit.next_hand(Const.JANKEN[event.widget["text"]])
 			self.enemy_unit.next_hand()
 			self.__judge()
+   
 		except Exception as e:
 			print(f"type:{type(e)}")
 			print(f"message:{e}")
