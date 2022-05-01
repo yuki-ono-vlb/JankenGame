@@ -1,4 +1,4 @@
-from tkinter import Message, Text
+from tkinter import Label, Text
 from tkinter.ttk import Progressbar
 from const import Const
 from functools import partial
@@ -10,7 +10,7 @@ class UnitBase():
 	ユニットの基底クラス
 	'''
 
-	def __init__(self, name: Text, print: partial, hp_value: Message, hp_bar: Progressbar):
+	def __init__(self, name: Text, print: partial, hp_value: Label, hp_bar: Progressbar):
 		self.name: Text = name
 		self.hp: int = Const.HP_MAX
 		self.print: partial = print
@@ -61,7 +61,6 @@ class UnitBase():
 			value *= Const.CRITICAL_MAGNIFICATION
 			self.print(f"強烈な一撃!!{Const.NEW_LINE}")
 		self.print(f"{self.get_name()}は{value}のダメージを受けた!{Const.NEW_LINE}")
-		self.log_message.see('end')
 		self.hp -= value
 		self.hp_bar['value'] = self.hp
 
