@@ -134,6 +134,8 @@ class Application(Frame):
 				return
 
 			self.print(f"ゲーム開始!!{Const.NEW_LINE}")
+			self.log_message.see('end')
+
 			self.rock[Const.STATE] = Const.NORMAL
 			self.scissors[Const.STATE] = Const.NORMAL
 			self.paper[Const.STATE] = Const.NORMAL
@@ -180,6 +182,8 @@ class Application(Frame):
 			return
 
 		self.print(f"お疲れさまでした。ゲーム終了です。{Const.NEW_LINE}")
+		self.log_message.see('end')
+  
 		self.prayer_unit.end_game()
 		self.enemy_unit.end_game()
 		self.rock[Const.STATE] = Const.DISABLE
@@ -198,6 +202,7 @@ class Application(Frame):
 
 		if self.prayer_unit.get_hand() == self.enemy_unit.get_hand():
 			self.print(f"あいこだ！！{Const.NEW_LINE}")
+			self.log_message.see('end')
 			return
 
 		win_unit: str = self.prayer_unit.get_name()
@@ -210,6 +215,7 @@ class Application(Frame):
 			self.prayer_unit.display_status()
    
 		self.print(f"{win_unit}{Const.WIN}{Const.NEW_LINE}")
+		self.log_message.see('end')
 
 		if self.prayer_unit.is_dead() or self.enemy_unit.is_dead():
 			result:str = "Win!!"

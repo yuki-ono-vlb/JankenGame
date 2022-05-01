@@ -61,6 +61,7 @@ class UnitBase():
 			value *= Const.CRITICAL_MAGNIFICATION
 			self.print(f"強烈な一撃!!{Const.NEW_LINE}")
 		self.print(f"{self.get_name()}は{value}のダメージを受けた!{Const.NEW_LINE}")
+		self.log_message.see('end')
 		self.hp -= value
 		self.hp_bar['value'] = self.hp
 
